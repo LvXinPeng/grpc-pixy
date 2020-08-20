@@ -1,8 +1,11 @@
-import com.csvw.lib.*;
+import com.csvw.lib.KafkaPixyServiceGrpc;
+import com.csvw.lib.ProdRq;
+import com.csvw.lib.ProdRs;
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+
 import java.util.logging.Logger;
 
 /**
@@ -11,22 +14,22 @@ import java.util.logging.Logger;
 public class App {
 
 
+    private static String targetHost = "10.122.70.102";
+    private static int targetPort = 19091;
 
-    public static void main(String[] args) {
-
+    public static void produceMsg(String cluster, String topic, String msg) {
         final Logger logger = Logger.getLogger(App.class.getName());
-//        ManagedChannel channel = ManagedChannelBuilder.forTarget("10.122.70.102:19091").usePlaintext().build();
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("10.122.70.102", 19091).usePlaintext().build();
+        //ManagedChannel channel = ManagedChannelBuilder.forTarget("10.122.70.102:19091").usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(targetHost, targetPort).usePlaintext().build();
         logger.info(channel.toString());
         KafkaPixyServiceGrpc.KafkaPixyServiceStub stub = KafkaPixyServiceGrpc.newStub(channel);
-
         logger.info(stub.toString());
-        String cluster = "10.160.242.166:9092,10.160.242.253:9092,10.160.242.21:9092";
-        String topic = "kafka-pixy";
-        ByteString msg = ByteString.copyFromUtf8("hellokafkapixy");
 
-        ProdRq rq = ProdRq.newBuilder().setCluster(cluster).setTopic(topic).setMessage(msg).setKeyUndefined(true).setAsyncMode(true).build();
+        ByteString bytesMsg = ByteString.copyFromUtf8(msg);
+        ProdRq rq = ProdRq.newBuilder().setCluster(cluster).setTopic(topic).setMessage(bytesMsg)
+                .setKeyUndefined(true).setAsyncMode(true).build();
         logger.info(rq.toString());
+
         StreamObserver<ProdRs> rsStreamObserver = new StreamObserver<ProdRs>() {
             @Override
             public void onNext(ProdRs prodRs) {
@@ -48,7 +51,15 @@ public class App {
             }
         };
         stub.produce(rq, rsStreamObserver);
+    }
 
+    public static void main(String[] args) {
+
+        String cluster = "default_cluster";
+        String topic = "kafka-pixy";
+        String msg = "hellokafkapixy";
+
+        produceMsg(cluster, topic, msg);
 
     }
 }
