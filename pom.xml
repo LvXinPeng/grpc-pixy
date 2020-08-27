@@ -87,7 +87,7 @@
           <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}</protocArtifact>
           <pluginId>grpc-java</pluginId>
           <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
-<!--          <outputDirectory>/src/main/java</outputDirectory>-->
+<!--          <outputDirectory>src/main/java/</outputDirectory>-->
         </configuration>
         <executions>
           <execution>
@@ -109,53 +109,4 @@
     </plugins>
   </build>
 
-<!--  <build>
-    <plugins>
-      &lt;!&ndash; 注意: pb插件仅在本地开发时开启, 发布jar时需要关闭, 否则发布失败, 使用 mvn clean package -Pdev打包 &ndash;&gt;
-      <plugin>
-        <groupId>org.xolstice.maven.plugins</groupId>
-        <artifactId>protobuf-maven-plugin</artifactId>
-        <version>0.6.1</version>
-        <configuration>
-          <protocExecutable>D:/protoc-3.12.4-win64/bin/protoc.exe</protocExecutable>
-          <protoSourceRoot>D:/IdeaProjects/csvw/src/main/resources/proto</protoSourceRoot>
-          <outputDirectory>D:/IdeaProjects/csvw/src/main/java</outputDirectory>
-          <clearOutputDirectory>false</clearOutputDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>test-compile</goal>
-            </goals>
-            <configuration>
-&lt;!&ndash;              <skip>${skipProtobufPlugin}</skip>&ndash;&gt;
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.0.1</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <source>6</source>
-          <target>6</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>-->
 </project>
