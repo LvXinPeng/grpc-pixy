@@ -59,6 +59,7 @@ public class KafkaPixyClient {
 
         try {
             stub.produce(rq);
+            System.out.println(stub.produce(rq));
         } catch (StatusRuntimeException e) {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
         }
