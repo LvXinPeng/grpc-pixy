@@ -30,6 +30,7 @@ public class App {
         KafkaPixyClient clientAsync = new KafkaPixyClient(target, true);
         clientAsync.produceMsgAsync(cluster, topic, msgAsync, true);
 */
+        String topicName = getTopicName("select * from dw_tag_metadata");
         Connection conn = getConn();
         PreparedStatement statement = conn.prepareStatement("select * from dw_tag_metadata");
         ResultSet resultSet = statement.executeQuery();
@@ -47,13 +48,11 @@ public class App {
                     e.printStackTrace();
                 }
             }
-//            System.out.println(jsonObj.toString());
-            client.produceMsg(cluster, topic, jsonObj.toString(), true);
+            client.produceMsg(cluster, topicName, jsonObj.toString(), true);
             /** TODO
              * kafka produce msg
              */
         }
-
         resultSet.close();
         statement.close();
         conn.close();
@@ -83,6 +82,15 @@ public class App {
              * kafka produce msg
              */
         }
+    }
+
+    private static String getTopicName(String str) {
+//        String tableName = str.toLowerCase().split("from ", 1)[1].split(" ", 1)[0].trim();
+        String tableName = "topic-";
+        long curTime = System.currentTimeMillis() / 1000;
+        String topic = tableName.concat(String.valueOf(curTime));
+        System.out.println(topic);
+        return topic;
     }
 
 }
